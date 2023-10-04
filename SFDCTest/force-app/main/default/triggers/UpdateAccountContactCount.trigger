@@ -2,9 +2,7 @@ trigger UpdateAccountContactCount on Contact (after insert, after update, after 
     Set<Id> oldAccountIdsToUpdate = new Set<Id>();
     Set<Id> newAccountIdsToUpdate = new Set<Id>();
 
-    // Handle inserts and updates
     for (Contact contact : Trigger.new) {
-        // Track both old and new Account Ids
         if (contact.AccountId != null) {
             newAccountIdsToUpdate.add(contact.AccountId);
         }
@@ -23,10 +21,8 @@ trigger UpdateAccountContactCount on Contact (after insert, after update, after 
     }
     }
 
-    // Query the count of Contacts for old and new Accounts
     Map<Id, Integer> accountContactCountMap = new Map<Id, Integer>();
     
-    // Query and update old Accounts
     List<Account> oldAccountsToUpdate = [
         SELECT Id, (SELECT Id FROM Contacts) FROM Account WHERE Id IN :oldAccountIdsToUpdate
     ];
@@ -42,7 +38,6 @@ trigger UpdateAccountContactCount on Contact (after insert, after update, after 
         accountContactCountMap.put(newAccount.Id, newAccount.Contacts.size());
     }
 
-    // Update the "Number_of_Contacts__c" field on both old and new Accounts
     List<Account> accountsToUpdate = new List<Account>();
     for (Id accountId : oldAccountIdsToUpdate) {
         Integer contactCount = accountContactCountMap.get(accountId);
