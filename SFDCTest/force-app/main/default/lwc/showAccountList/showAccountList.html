@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="Recent Accounts" icon-name="standard:account">
+        <div class="slds-m-around_medium">
+            <template if:true={accounts}>
+                <ul class="slds-list_ordered">
+                    <template for:each={accounts} for:item="account">
+                        <li key={account.Id}>
+                            {account.Name}
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template if:false={accounts}>
+                <p>No recent accounts found.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>
